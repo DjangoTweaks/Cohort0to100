@@ -1,0 +1,25 @@
+<html>
+
+    <script>
+        function populateDiv()
+        {
+            const a = document.getElementById("firstNumber").value;
+            const b = document.getElementById("secondNumber").value; 
+
+            fetch("https://sum-server.100xdevs.com/sum?=" + a+ "&b=" + b);
+            
+        }
+    </script>
+
+<body>
+    <input type="text" id="firstNumber" placeholder="First Number">
+    <br><br>
+    <input type="text" id="secondNumber" placeholder="Second Number">
+    <br><br>
+    <button onclick="populateDiv()">Calculate Sum</button>
+    <br><br>
+    <div id="finalSum"></div>
+
+</body>
+
+</html>

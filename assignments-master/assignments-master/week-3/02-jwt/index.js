@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const z = require('zod');
 const jwtPassword = 'secret';
 
 
@@ -13,9 +14,37 @@ const jwtPassword = 'secret';
  *                        Returns null if the username is not a valid email or
  *                        the password does not meet the length requirement.
  */
-function signJwt(username, password) {
-    // Your code here
+
+const zodSchema = z.object({
+    username: z.string().email(),
+    password: z.string().min(6)
+});
+
+
+
+const payloadContents= 
+{
+    username: "DjangoTweaks@gmail.com",
+    password: "DjangoTweaks123"
 }
+
+
+
+function signJwt(username, password) 
+{
+    try
+    {
+        zodSchema.parse(payloadContents);
+        const token = jwt.sign(payloadContents, jwtPassword);
+        return token; 
+    }
+    catch(e)
+    {
+        return null; 
+    }
+}
+
+console.log(signJwt());
 
 /**
  * Verifies a JWT using a secret key.
@@ -27,7 +56,20 @@ function signJwt(username, password) {
  */
 function verifyJwt(token) {
     // Your code here
+
+    try
+    {
+        jwt.verify(token, jwtPassword);
+        return true;
+    }   
+    catch(e)
+    {
+        return false; 
+    }
+
 }
+
+console.log(verifyJwt());
 
 /**
  * Decodes a JWT to reveal its payload without verifying its authenticity.
@@ -36,10 +78,22 @@ function verifyJwt(token) {
  * @returns {object|false} The decoded payload of the JWT if the token is a valid JWT format.
  *                         Returns false if the token is not a valid JWT format.
  */
-function decodeJwt(token) {
+function decodeJwt(token)
+{
     // Your code here
+    try
+    {
+        const x = jwt.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRqYW5nb1R3ZWFrc0BnbWFpbC5jb20iLCJwYXNzd29yZCI6IkRqYW5nb1R3ZWFrczEyMyIsImlhdCI6MTcwNjE2NTE3NH0.AayNviKMJMjILFXwOYfgfIPwonCogcpOpxOzZpV39VQ", jwtPassword);
+        return x; 
+    }
+    catch(e)
+    {
+        return false;
+    }
+
 }
 
+console.log(decodeJwt());
 
 module.exports = {
   signJwt,
